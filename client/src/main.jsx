@@ -1,7 +1,13 @@
-export default function App() {
-  return (
-    <h1 className="text-5xl font-bold text-purple-600">
-      Tailwind v4 + Vite works 🚀
-    </h1>
-  )
-}
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
+import App from './App';
+import './index.css';
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </React.StrictMode>
+);
