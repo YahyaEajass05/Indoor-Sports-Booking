@@ -1,6 +1,16 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation } from 'react-router-dom';
 import './App.css';
+
+// Import layout components
+import { 
+  Navbar, 
+  Footer, 
+  ScrollProgressBar, 
+  PageTransition, 
+  AnimatedBackground,
+  LoadingScreen 
+} from './components/layout';
 
 // Import pages
 import Home from './pages/public/Home';
@@ -14,25 +24,56 @@ import PrivacyPolicy from './pages/public/PrivacyPolicy';
 
 function App() {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
 
   // Scroll to top on route change
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [location.pathname]);
 
+  // Simulate initial loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-dark-950">
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/courts" element={<Courts />} />
-        <Route path="/about" element={<AboutUs />} />
-        <Route path="/how-it-works" element={<HowItWorks />} />
-        <Route path="/contact" element={<ContactUs />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/terms" element={<Terms />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-      </Routes>
-    </div>
+    <>
+      {/* Loading Screen */}
+      <LoadingScreen isLoading={isLoading} message="Preparing your experience..." />
+
+      {/* Animated Background */}
+      <AnimatedBackground variant="particles" />
+
+      {/* Scroll Progress Indicator */}
+      <ScrollProgressBar position="top" />
+
+      <div className="min-h-screen">
+        {/* Navigation Bar */}
+        <Navbar />
+
+        {/* Main Content with Page Transitions */}
+        <PageTransition variant="fade">
+          <main className="pt-20">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/courts" element={<Courts />} />
+              <Route path="/about" element={<AboutUs />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+            </Routes>
+          </main>
+        </PageTransition>
+
+        {/* Footer */}
+        <Footer />
+      </div>
+    </>
   );
 }
 
