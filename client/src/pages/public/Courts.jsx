@@ -1,383 +1,433 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  Search, MapPin, Calendar, Filter, Star, Heart, ChevronDown,
-  Grid, List, SlidersHorizontal, X, Check, DollarSign, Clock,
-  Users, Wifi, Car, Coffee, Zap, Shield, TrendingUp, Award
-} from 'lucide-react';
-import { useInView } from 'react-intersection-observer';
+import {
+  FiMapPin,
+  FiDollarSign,
+  FiStar,
+  FiClock,
+  FiUsers,
+  FiFilter,
+  FiSearch,
+  FiGrid,
+  FiList,
+  FiHeart,
+  FiCalendar
+} from 'react-icons/fi';
+import PublicBackground from '../../components/layout/PublicBackground';
 import { Link } from 'react-router-dom';
 
 const Courts = () => {
   const [viewMode, setViewMode] = useState('grid');
-  const [filterOpen, setFilterOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [selectedSport, setSelectedSport] = useState('all');
-  const [priceRange, setPriceRange] = useState([0, 200]);
-  const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [sortBy, setSortBy] = useState('popularity');
+  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [priceRange, setPriceRange] = useState('all');
+  const [sortBy, setSortBy] = useState('featured');
 
   const courts = [
     {
-      id: 1, name: 'Elite Basketball Arena', sport: 'Basketball',
-      location: 'Downtown Sports Complex, 2.3 km away',
-      rating: 4.9, reviews: 234, price: 50,
-      image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=800',
-      amenities: ['AC', 'Parking', 'Locker Room', 'Shower', 'Cafe'],
-      availability: 'Available Today', featured: true
+      id: 1,
+      name: 'Premier Basketball Court',
+      sport: 'Basketball',
+      location: 'Downtown Sports Complex',
+      address: '123 Main Street, Downtown',
+      price: 60,
+      rating: 4.8,
+      reviews: 156,
+      capacity: 10,
+      amenities: ['Parking', 'Locker Rooms', 'Cafeteria', 'WiFi'],
+      availability: 'Available',
+      image: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?w=600',
+      featured: true
     },
     {
-      id: 2, name: 'Pro Badminton Center', sport: 'Badminton',
-      location: 'Riverside Sports Hub, 3.1 km away',
-      rating: 4.8, reviews: 189, price: 35,
-      image: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800',
-      amenities: ['AC', 'Shower', 'Parking', 'Water'],
-      availability: 'Available Today', featured: false
+      id: 2,
+      name: 'Elite Tennis Arena',
+      sport: 'Tennis',
+      location: 'Riverside Sports Center',
+      address: '456 River Road, Riverside',
+      price: 75,
+      rating: 4.9,
+      reviews: 203,
+      capacity: 4,
+      amenities: ['Parking', 'Pro Shop', 'Coaching Available'],
+      availability: 'Available',
+      image: 'https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=600',
+      featured: true
     },
     {
-      id: 3, name: 'Champions Tennis Court', sport: 'Tennis',
-      location: 'Greenfield Sports Arena, 4.5 km away',
-      rating: 4.7, reviews: 156, price: 45,
-      image: 'https://images.unsplash.com/photo-1622163642998-1ea32b0bbc67?w=800',
-      amenities: ['Lighting', 'Parking', 'Cafe', 'Equipment'],
-      availability: 'Available Today', featured: true
+      id: 3,
+      name: 'Pro Badminton Hall',
+      sport: 'Badminton',
+      location: 'City Sports Hub',
+      address: '789 City Center, Downtown',
+      price: 45,
+      rating: 4.7,
+      reviews: 128,
+      capacity: 4,
+      amenities: ['Parking', 'Equipment Rental', 'Shower Facilities'],
+      availability: 'Available',
+      image: 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=600',
+      featured: false
+    },
+    {
+      id: 4,
+      name: 'Indoor Soccer Arena',
+      sport: 'Football',
+      location: 'Westside Complex',
+      address: '654 West Boulevard, Westside',
+      price: 100,
+      rating: 4.8,
+      reviews: 187,
+      capacity: 22,
+      amenities: ['Parking', 'Full Field', 'Training Equipment'],
+      availability: 'Limited',
+      image: 'https://images.unsplash.com/photo-1575361204480-aadea25e6e68?w=600',
+      featured: true
+    },
+    {
+      id: 5,
+      name: 'Volleyball Center',
+      sport: 'Volleyball',
+      location: 'Eastside Athletic Club',
+      address: '321 East Avenue, Eastside',
+      price: 55,
+      rating: 4.6,
+      reviews: 95,
+      capacity: 12,
+      amenities: ['Parking', 'Sand Courts', 'Beach Volleyball'],
+      availability: 'Available',
+      image: 'https://images.unsplash.com/photo-1612872087720-bb876e2e67d1?w=600',
+      featured: false
+    },
+    {
+      id: 6,
+      name: 'Championship Basketball Arena',
+      sport: 'Basketball',
+      location: 'North Sports Complex',
+      address: '987 North Street, North District',
+      price: 80,
+      rating: 4.9,
+      reviews: 234,
+      capacity: 12,
+      amenities: ['Parking', 'Locker Rooms', 'Sports Bar', 'WiFi'],
+      availability: 'Available',
+      image: 'https://images.unsplash.com/photo-1519861531473-9200262188bf?w=600',
+      featured: true
     }
   ];
 
+  const filteredCourts = useMemo(() => {
+    let filtered = courts;
+
+    if (searchTerm) {
+      filtered = filtered.filter(court =>
+        court.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        court.location.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+    }
+
+    if (selectedSport !== 'all') {
+      filtered = filtered.filter(court => court.sport === selectedSport);
+    }
+
+    if (selectedLocation !== 'all') {
+      filtered = filtered.filter(court => court.location === selectedLocation);
+    }
+
+    if (priceRange !== 'all') {
+      const ranges = {
+        low: [0, 50],
+        medium: [51, 75],
+        high: [76, Infinity]
+      };
+      const [min, max] = ranges[priceRange];
+      filtered = filtered.filter(court => court.price >= min && court.price <= max);
+    }
+
+    filtered.sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low': return a.price - b.price;
+        case 'price-high': return b.price - a.price;
+        case 'rating': return b.rating - a.rating;
+        case 'featured': return b.featured - a.featured;
+        default: return 0;
+      }
+    });
+
+    return filtered;
+  }, [searchTerm, selectedSport, selectedLocation, priceRange, sortBy]);
+
+  const sports = [...new Set(courts.map(c => c.sport))];
+  const locations = [...new Set(courts.map(c => c.location))];
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 300, damping: 24 }
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-dark-950 pt-20">
-      <HeroSearch 
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        selectedSport={selectedSport}
-        setSelectedSport={setSelectedSport}
-      />
+    <div className="relative min-h-screen">
+      <PublicBackground variant="blue" />
 
-      <FilterBar
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-        filterOpen={filterOpen}
-        setFilterOpen={setFilterOpen}
-        sortBy={sortBy}
-        setSortBy={setSortBy}
-        courtsCount={courts.length}
-      />
+      <div className="relative z-10 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-12"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
+              Find Your Perfect <span className="gradient-text">Court</span>
+            </h1>
+            <p className="text-xl text-gray-600">
+              Browse and book from {courts.length} available courts across the city
+            </p>
+          </motion.div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="flex gap-8">
-          <AnimatePresence>
-            {filterOpen && (
-              <FilterSidebar
-                priceRange={priceRange}
-                setPriceRange={setPriceRange}
-                selectedAmenities={selectedAmenities}
-                setSelectedAmenities={setSelectedAmenities}
-                setFilterOpen={setFilterOpen}
-              />
-            )}
-          </AnimatePresence>
-
-          <div className="flex-1">
-            <CourtsList courts={courts} viewMode={viewMode} />
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const HeroSearch = ({ searchQuery, setSearchQuery, selectedSport, setSelectedSport }) => {
-  const sports = ['All Sports', 'Basketball', 'Badminton', 'Tennis', 'Football', 'Squash'];
-
-  return (
-    <section className="relative py-20 bg-gradient-to-br from-primary-900 via-dark-800 to-secondary-900 overflow-hidden">
-      <div className="absolute inset-0 grid-bg opacity-20" />
-      <motion.div
-        className="absolute top-20 right-10 w-96 h-96 bg-primary-500/20 rounded-full blur-3xl"
-        animate={{ scale: [1, 1.2, 1], x: [0, 50, 0] }}
-        transition={{ duration: 8, repeat: Infinity }}
-      />
-
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          className="max-w-4xl mx-auto text-center mb-10"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <h1 className="text-5xl md:text-6xl font-bold text-white mb-4">
-            Find Your Perfect <span className="gradient-text">Court</span>
-          </h1>
-          <p className="text-xl text-gray-300">Discover and book premium sports courts near you</p>
-        </motion.div>
-
-        <motion.div
-          className="max-w-5xl mx-auto"
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          <div className="glass p-4 rounded-2xl">
-            <div className="flex flex-col md:flex-row gap-4">
+          {/* Search and Filters */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 }}
+            className="glass rounded-2xl border border-gray-200/50 p-6 mb-8"
+          >
+            <div className="flex flex-col lg:flex-row gap-4">
+              {/* Search */}
               <div className="flex-1 relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <FiSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
                 <input
                   type="text"
-                  placeholder="Search by court name or location..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 bg-white/10 border border-white/20 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-primary-500"
+                  placeholder="Search courts by name or location..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-12 pr-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
                 />
               </div>
 
-              <div className="relative">
+              {/* Filters */}
+              <div className="flex flex-wrap gap-3">
                 <select
                   value={selectedSport}
                   onChange={(e) => setSelectedSport(e.target.value)}
-                  className="appearance-none px-6 py-4 pr-12 bg-white/10 border border-white/20 rounded-xl text-white focus:outline-none cursor-pointer"
+                  className="px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
                 >
-                  {sports.map((sport) => (
-                    <option key={sport} value={sport.toLowerCase()} className="bg-dark-800">
-                      {sport}
-                    </option>
+                  <option value="all">All Sports</option>
+                  {sports.map(sport => (
+                    <option key={sport} value={sport}>{sport}</option>
                   ))}
                 </select>
-                <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
-              </div>
 
+                <select
+                  value={selectedLocation}
+                  onChange={(e) => setSelectedLocation(e.target.value)}
+                  className="px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="all">All Locations</option>
+                  {locations.map(location => (
+                    <option key={location} value={location}>{location}</option>
+                  ))}
+                </select>
+
+                <select
+                  value={priceRange}
+                  onChange={(e) => setPriceRange(e.target.value)}
+                  className="px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="all">All Prices</option>
+                  <option value="low">$0 - $50</option>
+                  <option value="medium">$51 - $75</option>
+                  <option value="high">$76+</option>
+                </select>
+
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="px-4 py-3 bg-white/50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary-500"
+                >
+                  <option value="featured">Featured</option>
+                  <option value="price-low">Price: Low to High</option>
+                  <option value="price-high">Price: High to Low</option>
+                  <option value="rating">Highest Rated</option>
+                </select>
+
+                <div className="flex gap-2 bg-white/50 p-1 rounded-xl border border-gray-200">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setViewMode('grid')}
+                    className={`p-2 rounded-lg ${viewMode === 'grid' ? 'bg-primary-500 text-white' : 'text-gray-600'}`}
+                  >
+                    <FiGrid />
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setViewMode('list')}
+                    className={`p-2 rounded-lg ${viewMode === 'list' ? 'bg-primary-500 text-white' : 'text-gray-600'}`}
+                  >
+                    <FiList />
+                  </motion.button>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Results Count */}
+          <div className="mb-6 text-gray-600">
+            Showing <span className="font-semibold text-gray-900">{filteredCourts.length}</span> courts
+          </div>
+
+          {/* Courts Grid/List */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={viewMode}
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}
+            >
+              {filteredCourts.map((court) => (
+                <motion.div
+                  key={court.id}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.02, y: -5 }}
+                  className={`glass rounded-2xl border border-gray-200/50 overflow-hidden ${
+                    viewMode === 'list' ? 'flex flex-col md:flex-row' : ''
+                  }`}
+                >
+                  {/* Image */}
+                  <div className={`relative ${viewMode === 'list' ? 'md:w-80' : 'h-48'} overflow-hidden`}>
+                    <img src={court.image} alt={court.name} className="w-full h-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    
+                    {court.featured && (
+                      <div className="absolute top-4 left-4 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-semibold">
+                        Featured
+                      </div>
+                    )}
+
+                    <motion.button
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="absolute top-4 right-4 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center hover:bg-red-500 hover:text-white transition-all"
+                    >
+                      <FiHeart />
+                    </motion.button>
+
+                    <div className="absolute bottom-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full flex items-center gap-1">
+                      <FiStar className="text-yellow-500 fill-yellow-500" />
+                      <span className="font-semibold text-gray-900">{court.rating}</span>
+                      <span className="text-xs text-gray-600">({court.reviews})</span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="p-6 flex-1">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 mb-1">{court.name}</h3>
+                        <div className="flex items-center gap-2 text-gray-600 text-sm mb-2">
+                          <FiMapPin className="text-primary-500" />
+                          {court.location}
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      <span className="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-xs font-semibold">
+                        {court.sport}
+                      </span>
+                      <span className="px-3 py-1 bg-green-100 text-green-700 rounded-full text-xs font-semibold">
+                        {court.availability}
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 mb-4 text-sm">
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <FiDollarSign className="text-green-500" />
+                        ${court.price}/hr
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600">
+                        <FiUsers className="text-blue-500" />
+                        Up to {court.capacity}
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {court.amenities.slice(0, 3).map((amenity, i) => (
+                        <span key={i} className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded">
+                          {amenity}
+                        </span>
+                      ))}
+                      {court.amenities.length > 3 && (
+                        <span className="text-xs px-2 py-1 bg-gray-100 text-gray-600 rounded">
+                          +{court.amenities.length - 3} more
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="flex gap-2">
+                      <Link to="/auth/login" className="flex-1">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="w-full px-4 py-2 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all"
+                        >
+                          <FiCalendar className="inline mr-2" />
+                          Book Now
+                        </motion.button>
+                      </Link>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Empty State */}
+          {filteredCourts.length === 0 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="glass p-16 rounded-2xl border border-gray-200/50 text-center"
+            >
+              <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+                <FiMapPin className="text-4xl text-gray-400" />
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">No Courts Found</h3>
+              <p className="text-gray-600 mb-6">Try adjusting your filters or search criteria</p>
               <motion.button
-                className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-bold rounded-xl"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedSport('all');
+                  setSelectedLocation('all');
+                  setPriceRange('all');
+                }}
+                className="px-6 py-3 bg-primary-500 text-white rounded-xl font-semibold"
               >
-                Search
+                Clear Filters
               </motion.button>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const FilterBar = ({ viewMode, setViewMode, filterOpen, setFilterOpen, sortBy, setSortBy, courtsCount }) => {
-  return (
-    <div className="sticky top-20 z-40 bg-dark-900/95 backdrop-blur-lg border-b border-white/10">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <motion.button
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium ${
-                filterOpen ? 'bg-primary-500 text-white' : 'bg-white/10 text-gray-300'
-              }`}
-              onClick={() => setFilterOpen(!filterOpen)}
-              whileHover={{ scale: 1.05 }}
-            >
-              <SlidersHorizontal className="w-5 h-5" />
-              Filters
-            </motion.button>
-            <span className="text-gray-400">
-              <span className="text-white font-semibold">{courtsCount}</span> courts found
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value)}
-              className="px-4 py-2 bg-white/10 border border-white/20 rounded-lg text-white cursor-pointer"
-            >
-              <option value="popularity" className="bg-dark-800">Most Popular</option>
-              <option value="price-low" className="bg-dark-800">Price: Low to High</option>
-              <option value="rating" className="bg-dark-800">Highest Rated</option>
-            </select>
-
-            <div className="flex gap-2 p-1 bg-white/10 rounded-lg">
-              <motion.button
-                className={`p-2 rounded ${viewMode === 'grid' ? 'bg-primary-500 text-white' : 'text-gray-400'}`}
-                onClick={() => setViewMode('grid')}
-                whileHover={{ scale: 1.1 }}
-              >
-                <Grid className="w-5 h-5" />
-              </motion.button>
-              <motion.button
-                className={`p-2 rounded ${viewMode === 'list' ? 'bg-primary-500 text-white' : 'text-gray-400'}`}
-                onClick={() => setViewMode('list')}
-                whileHover={{ scale: 1.1 }}
-              >
-                <List className="w-5 h-5" />
-              </motion.button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-const FilterSidebar = ({ priceRange, setPriceRange, selectedAmenities, setSelectedAmenities, setFilterOpen }) => {
-  const amenities = ['AC', 'Parking', 'Locker Room', 'Shower', 'Cafe', 'Equipment', 'First Aid'];
-
-  return (
-    <motion.div
-      className="w-80 bg-dark-900 rounded-2xl p-6 border border-white/10 h-fit sticky top-32"
-      initial={{ x: -300, opacity: 0 }}
-      animate={{ x: 0, opacity: 1 }}
-      exit={{ x: -300, opacity: 0 }}
-    >
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-bold text-white">Filters</h3>
-        <button onClick={() => setFilterOpen(false)} className="text-gray-400 hover:text-white">
-          <X className="w-5 h-5" />
-        </button>
-      </div>
-
-      <div className="space-y-6">
-        <div>
-          <h4 className="text-white font-semibold mb-4">Price Range</h4>
-          <div className="flex items-center gap-4">
-            <input
-              type="range"
-              min="0"
-              max="200"
-              value={priceRange[1]}
-              onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-              className="flex-1"
-            />
-            <span className="text-white font-bold">${priceRange[1]}</span>
-          </div>
-        </div>
-
-        <div>
-          <h4 className="text-white font-semibold mb-4">Amenities</h4>
-          <div className="space-y-2">
-            {amenities.map((amenity) => (
-              <label key={amenity} className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={selectedAmenities.includes(amenity)}
-                  onChange={(e) => {
-                    if (e.target.checked) {
-                      setSelectedAmenities([...selectedAmenities, amenity]);
-                    } else {
-                      setSelectedAmenities(selectedAmenities.filter(a => a !== amenity));
-                    }
-                  }}
-                  className="w-4 h-4 rounded accent-primary-500"
-                />
-                <span className="text-gray-300">{amenity}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <motion.button
-          className="w-full py-3 bg-primary-500 text-white font-bold rounded-lg"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          Apply Filters
-        </motion.button>
-      </div>
-    </motion.div>
-  );
-};
-
-const CourtsList = ({ courts, viewMode }) => {
-  return (
-    <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-6'}>
-      {courts.map((court, index) => (
-        <CourtCard key={court.id} court={court} index={index} viewMode={viewMode} />
-      ))}
-    </div>
-  );
-};
-
-const CourtCard = ({ court, index, viewMode }) => {
-  const [liked, setLiked] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      whileHover={{ y: -10 }}
-      className={viewMode === 'list' ? 'flex gap-6' : ''}
-    >
-      <div className="bg-dark-800 rounded-2xl overflow-hidden border border-white/10 hover:border-primary-500/50 transition-all">
-        <div className={`relative overflow-hidden ${viewMode === 'list' ? 'w-64' : 'h-64'}`}>
-          <motion.img
-            src={court.image}
-            alt={court.name}
-            className="w-full h-full object-cover"
-            whileHover={{ scale: 1.1 }}
-            transition={{ duration: 0.6 }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/50 to-transparent" />
-          
-          <motion.button
-            className={`absolute top-4 right-4 w-10 h-10 backdrop-blur-sm rounded-full flex items-center justify-center ${
-              liked ? 'bg-red-500 text-white' : 'bg-white/10 text-white'
-            }`}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={() => setLiked(!liked)}
-          >
-            <Heart className={`w-5 h-5 ${liked ? 'fill-white' : ''}`} />
-          </motion.button>
-
-          {court.featured && (
-            <span className="absolute top-4 left-4 px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white text-sm font-bold rounded-full">
-              Featured
-            </span>
+            </motion.div>
           )}
         </div>
-
-        <div className="p-6 flex-1">
-          <h3 className="text-2xl font-bold text-white mb-2">{court.name}</h3>
-          <p className="text-gray-400 mb-4 flex items-center gap-2">
-            <MapPin className="w-4 h-4" />
-            {court.location}
-          </p>
-
-          <div className="flex items-center gap-2 mb-4">
-            <div className="flex">
-              {[...Array(5)].map((_, i) => (
-                <Star
-                  key={i}
-                  className={`w-4 h-4 ${i < Math.floor(court.rating) ? 'text-yellow-400 fill-yellow-400' : 'text-gray-600'}`}
-                />
-              ))}
-            </div>
-            <span className="text-white font-semibold">{court.rating}</span>
-            <span className="text-gray-400 text-sm">({court.reviews} reviews)</span>
-          </div>
-
-          <div className="flex flex-wrap gap-2 mb-4">
-            {court.amenities.slice(0, 3).map((amenity, i) => (
-              <span key={i} className="px-3 py-1 bg-white/5 text-gray-300 text-xs rounded-full">
-                {amenity}
-              </span>
-            ))}
-          </div>
-
-          <div className="flex items-center justify-between pt-4 border-t border-white/10">
-            <div>
-              <p className="text-gray-400 text-sm">From</p>
-              <p className="text-2xl font-bold text-white">${court.price}<span className="text-sm">/hr</span></p>
-            </div>
-            <Link to={`/court/${court.id}`}>
-              <motion.button
-                className="px-6 py-3 bg-gradient-to-r from-primary-500 to-primary-700 text-white font-semibold rounded-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View Details
-              </motion.button>
-            </Link>
-          </div>
-        </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

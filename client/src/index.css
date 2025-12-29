@@ -2,6 +2,7 @@
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
 @import 'animate.css';
+@import './dark-mode.css';
 
 /* Base Styles */
 @layer base {
@@ -50,11 +51,19 @@
 @layer components {
   /* Glass Morphism Effect */
   .glass {
-    background: rgba(255, 255, 255, 0.25);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+  }
+
+  .dark .glass {
+    background: rgba(15, 23, 42, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
   }
 
   .glass-dark {
@@ -456,24 +465,7 @@
   }
 }
 
-/* Dark Mode Styles */
-@media (prefers-color-scheme: dark) {
-  body {
-    @apply bg-gradient-to-br from-dark-900 via-dark-800 to-dark-900 text-gray-100;
-  }
-
-  .glass {
-    background: rgba(15, 23, 42, 0.7);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .card-glow:hover {
-    box-shadow: 
-      0 0 20px rgba(139, 92, 246, 0.4),
-      0 0 40px rgba(139, 92, 246, 0.2),
-      0 10px 30px rgba(0, 0, 0, 0.5);
-  }
-}
+/* Dark Mode Styles - imported from separate file */
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {

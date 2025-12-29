@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { useTheme } from '../../context/ThemeContext';
 
 const Footer = () => {
+  const { isDark } = useTheme();
   const [email, setEmail] = useState('');
   const [isSubscribed, setIsSubscribed] = useState(false);
   const [hoveredSocial, setHoveredSocial] = useState(null);
@@ -121,11 +123,15 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white overflow-hidden">
+    <footer className={`relative overflow-hidden transition-colors duration-300 ${
+      isDark 
+        ? 'bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white' 
+        : 'bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-900'
+    }`}>
       {/* Animated background */}
-      <div className="absolute inset-0 opacity-10">
+      <div className={`absolute inset-0 ${isDark ? 'opacity-10' : 'opacity-5'}`}>
         <div className="absolute inset-0" style={{
-          backgroundImage: `radial-gradient(circle at 2px 2px, rgba(59, 130, 246, 0.4) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 2px 2px, ${isDark ? 'rgba(59, 130, 246, 0.4)' : 'rgba(59, 130, 246, 0.2)'} 1px, transparent 0)`,
           backgroundSize: '40px 40px',
         }} />
       </div>
@@ -138,7 +144,7 @@ const Footer = () => {
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className="absolute w-2 h-2 bg-primary-400/20 rounded-full"
+            className={`absolute w-2 h-2 rounded-full ${isDark ? 'bg-primary-400/20' : 'bg-primary-400/10'}`}
             style={{
               left: `${Math.random() * 100}%`,
               top: `${Math.random() * 100}%`,
@@ -192,7 +198,7 @@ const Footer = () => {
                 >
                   {stat.value}
                 </motion.div>
-                <p className="text-gray-400 text-sm">{stat.label}</p>
+                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -215,11 +221,11 @@ const Footer = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold gradient-text-animated">CourtBook</h3>
-                  <p className="text-xs text-gray-400">Indoor Sports Hub</p>
+                  <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>Indoor Sports Hub</p>
                 </div>
               </motion.div>
             </Link>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className={`mb-6 leading-relaxed ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
               Your premier destination for booking indoor sports facilities. Find and reserve courts for badminton, 
               basketball, tennis, and more with just a few clicks.
             </p>
@@ -233,7 +239,11 @@ const Footer = () => {
                   placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-3 rounded-lg bg-gray-800/50 border border-gray-700 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all outline-none text-white placeholder-gray-500"
+                  className={`w-full px-4 py-3 rounded-lg border focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 transition-all outline-none ${
+                    isDark 
+                      ? 'bg-gray-800/50 border-gray-700 text-white placeholder-gray-500' 
+                      : 'bg-white border-gray-300 text-gray-900 placeholder-gray-400'
+                  }`}
                   disabled={isSubscribed}
                 />
                 <motion.button
@@ -287,7 +297,9 @@ const Footer = () => {
                   >
                     <Link
                       to={link.path}
-                      className="text-gray-400 hover:text-white transition-colors inline-block relative group"
+                      className={`transition-colors inline-block relative group ${
+                        isDark ? 'text-gray-400 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                      }`}
                       onMouseEnter={() => setHoveredLink(`${sectionIndex}-${index}`)}
                       onMouseLeave={() => setHoveredLink(null)}
                     >
@@ -313,7 +325,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             {/* Copyright */}
             <motion.p
-              className="text-gray-400 text-sm"
+              className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
@@ -366,7 +378,7 @@ const Footer = () => {
 
           {/* Extra Links */}
           <motion.div
-            className="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-500"
+            className={`mt-6 flex flex-wrap justify-center gap-4 text-sm ${isDark ? 'text-gray-500' : 'text-gray-600'}`}
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

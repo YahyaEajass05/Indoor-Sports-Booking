@@ -12,6 +12,9 @@ import {
   LoadingScreen 
 } from './components/layout';
 
+// Import context
+import { ThemeProvider } from './context/ThemeContext';
+
 // Import pages
 import Home from './pages/public/Home';
 import Courts from './pages/public/Courts';
@@ -40,7 +43,7 @@ function App() {
   }, []);
 
   return (
-    <>
+    <ThemeProvider>
       {/* Loading Screen */}
       <LoadingScreen isLoading={isLoading} message="Preparing your experience..." />
 
@@ -73,7 +76,7 @@ function App() {
         {/* Footer */}
         <Footer />
       </div>
-    </>
+    </ThemeProvider>
   );
 }
 

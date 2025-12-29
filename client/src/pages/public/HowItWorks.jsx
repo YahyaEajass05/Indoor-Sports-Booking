@@ -1,175 +1,231 @@
-import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { useInView } from 'react-intersection-observer';
-import { Search, Calendar, CreditCard, Play, CheckCircle, MapPin, Clock, Shield } from 'lucide-react';
+import {
+  FiSearch,
+  FiCalendar,
+  FiCreditCard,
+  FiCheckCircle,
+  FiMapPin,
+  FiClock,
+  FiUser,
+  FiStar
+} from 'react-icons/fi';
+import PublicBackground from '../../components/layout/PublicBackground';
+import { Link } from 'react-router-dom';
 
 const HowItWorks = () => {
-  return (
-    <div className="min-h-screen bg-dark-950 pt-20">
-      <HeroSection />
-      <StepsSection />
-      <FeaturesSection />
-      <CTASection />
-    </div>
-  );
-};
-
-const HeroSection = () => {
-  const [ref, inView] = useInView({ threshold: 0.2, triggerOnce: true });
-
-  return (
-    <section className="relative py-32 bg-gradient-to-br from-primary-900 via-dark-800 to-secondary-900 overflow-hidden" ref={ref}>
-      <div className="absolute inset-0 grid-bg opacity-20" />
-      <div className="container mx-auto px-4 relative z-10">
-        <motion.div
-          className="max-w-4xl mx-auto text-center"
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-        >
-          <h1 className="text-6xl md:text-7xl font-bold text-white mb-6">
-            How It <span className="gradient-text">Works</span>
-          </h1>
-          <p className="text-2xl text-gray-300">Book your perfect court in just 4 simple steps</p>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-
-const StepsSection = () => {
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
-
   const steps = [
     {
-      icon: Search, title: 'Search Courts',
-      description: 'Browse through hundreds of premium sports courts near you.',
-      color: 'from-blue-400 to-cyan-500',
-      features: ['Real-time availability', 'Location-based search', 'Advanced filters']
+      number: '01',
+      icon: FiSearch,
+      title: 'Find Your Court',
+      description: 'Browse through our extensive collection of courts. Filter by sport, location, price, and availability to find the perfect match.',
+      features: ['Search by location', 'Filter by sport type', 'View real-time availability', 'Compare prices'],
+      color: 'from-blue-500 to-cyan-600'
     },
     {
-      icon: Calendar, title: 'Select Time Slot',
-      description: 'Choose your preferred date and time slot with instant confirmation.',
-      color: 'from-purple-400 to-pink-500',
-      features: ['Flexible timing', 'Instant confirmation', 'Multiple slots']
+      number: '02',
+      icon: FiCalendar,
+      title: 'Select Date & Time',
+      description: 'Choose your preferred date and time slot. Our calendar shows real-time availability so you know exactly what\'s open.',
+      features: ['Interactive calendar', 'Real-time slots', 'Flexible timing', 'Recurring bookings'],
+      color: 'from-purple-500 to-pink-600'
     },
     {
-      icon: CreditCard, title: 'Make Payment',
-      description: 'Complete booking with secure payment options.',
-      color: 'from-green-400 to-emerald-500',
-      features: ['Secure payments', 'Multiple options', 'Instant receipts']
+      number: '03',
+      icon: FiCreditCard,
+      title: 'Secure Payment',
+      description: 'Complete your booking with our secure payment system. We accept all major payment methods for your convenience.',
+      features: ['Multiple payment options', 'Secure encryption', 'Instant confirmation', 'Digital receipt'],
+      color: 'from-green-500 to-emerald-600'
     },
     {
-      icon: Play, title: 'Play & Enjoy',
-      description: 'Show up and enjoy your game with digital pass.',
-      color: 'from-orange-400 to-red-500',
-      features: ['Digital pass', 'Easy check-in', '24/7 support']
+      number: '04',
+      icon: FiCheckCircle,
+      title: 'Play & Enjoy',
+      description: 'Receive instant confirmation and show up at your booked time. Your court is ready and waiting for you!',
+      features: ['Instant confirmation', 'Email & SMS alerts', 'Easy cancellation', '24/7 support'],
+      color: 'from-orange-500 to-red-600'
     }
   ];
 
-  return (
-    <section className="py-32" ref={ref}>
-      <div className="container mx-auto px-4">
-        <div className="space-y-32">
-          {steps.map((step, index) => (
-            <motion.div
-              key={index}
-              className={`flex flex-col ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-16 items-center`}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-              animate={inView ? { opacity: 1, x: 0 } : {}}
-              transition={{ delay: index * 0.2 }}
-            >
-              <div className="flex-1">
-                <motion.div
-                  className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-6`}
-                  whileHover={{ scale: 1.1, rotate: 5 }}
-                >
-                  <step.icon className="w-12 h-12 text-white" />
-                </motion.div>
-
-                <div className="flex items-center gap-4 mb-4">
-                  <span className="text-6xl font-bold text-white/10">0{index + 1}</span>
-                  <h3 className="text-4xl font-bold text-white">{step.title}</h3>
-                </div>
-
-                <p className="text-xl text-gray-300 mb-6">{step.description}</p>
-
-                <div className="space-y-3">
-                  {step.features.map((feature, i) => (
-                    <div key={i} className="flex items-center gap-3">
-                      <CheckCircle className="w-6 h-6 text-primary-400" />
-                      <span className="text-gray-400">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex-1">
-                <div className={`aspect-square rounded-2xl bg-gradient-to-br ${step.color} opacity-20`} />
-              </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
-    </section>
-  );
-};
-
-const FeaturesSection = () => {
-  const [ref, inView] = useInView({ threshold: 0.1, triggerOnce: true });
-
-  const features = [
-    { icon: MapPin, title: 'Location Based', desc: 'Find courts near you instantly' },
-    { icon: Clock, title: 'Real-time', desc: 'See available slots live' },
-    { icon: Shield, title: 'Secure', desc: 'Bank-level security' },
-    { icon: CheckCircle, title: 'Instant', desc: 'Get confirmation immediately' }
+  const benefits = [
+    { icon: FiClock, title: '24/7 Booking', description: 'Book courts anytime, anywhere' },
+    { icon: FiMapPin, title: 'Multiple Locations', description: 'Courts across the city' },
+    { icon: FiStar, title: 'Quality Assured', description: 'Premium facilities only' },
+    { icon: FiUser, title: 'Easy Management', description: 'View and manage all bookings' }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { staggerChildren: 0.2 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: 'spring', stiffness: 300, damping: 24 }
+    }
+  };
+
   return (
-    <section className="py-32 bg-dark-900" ref={ref}>
-      <div className="container mx-auto px-4">
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {features.map((feature, index) => (
-            <motion.div
-              key={index}
-              className="p-8 rounded-2xl bg-white/5 border border-white/10 text-center"
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10 }}
-            >
-              <feature.icon className="w-12 h-12 text-primary-400 mx-auto mb-4" />
-              <h3 className="text-xl font-bold text-white mb-2">{feature.title}</h3>
-              <p className="text-gray-400">{feature.desc}</p>
-            </motion.div>
-          ))}
+    <div className="relative min-h-screen">
+      <PublicBackground variant="green" />
+
+      <div className="relative z-10 py-20 px-6">
+        <div className="max-w-7xl mx-auto">
+          {/* Hero */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-center mb-20"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
+              How <span className="gradient-text">CourtBooker</span> Works
+            </h1>
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              Book your favorite indoor sports courts in just 4 simple steps
+            </p>
+          </motion.div>
+
+          {/* Steps */}
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="space-y-12 mb-20"
+          >
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              const isEven = index % 2 === 0;
+
+              return (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-8 items-center`}
+                >
+                  {/* Content */}
+                  <div className="flex-1">
+                    <motion.div
+                      whileHover={{ scale: 1.02, x: isEven ? 10 : -10 }}
+                      className="glass p-8 rounded-2xl border border-gray-200/50 relative overflow-hidden"
+                    >
+                      <div className={`absolute top-0 ${isEven ? 'right-0' : 'left-0'} w-64 h-64 bg-gradient-to-br ${step.color} opacity-10 rounded-full blur-3xl`} />
+                      
+                      <div className="relative z-10">
+                        <div className="flex items-center gap-4 mb-6">
+                          <span className="text-6xl font-bold text-gray-200">{step.number}</span>
+                          <div className={`w-16 h-16 bg-gradient-to-br ${step.color} rounded-xl flex items-center justify-center`}>
+                            <Icon className="text-3xl text-white" />
+                          </div>
+                        </div>
+
+                        <h3 className="text-3xl font-bold text-gray-900 mb-4">{step.title}</h3>
+                        <p className="text-lg text-gray-600 mb-6">{step.description}</p>
+
+                        <div className="grid grid-cols-2 gap-3">
+                          {step.features.map((feature, i) => (
+                            <div key={i} className="flex items-center gap-2">
+                              <FiCheckCircle className="text-green-500 flex-shrink-0" />
+                              <span className="text-sm text-gray-700">{feature}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </motion.div>
+                  </div>
+
+                  {/* Visual */}
+                  <div className="flex-1 flex justify-center">
+                    <motion.div
+                      whileHover={{ scale: 1.1, rotate: 5 }}
+                      className={`w-64 h-64 bg-gradient-to-br ${step.color} rounded-3xl flex items-center justify-center shadow-2xl`}
+                    >
+                      <Icon className="text-8xl text-white" />
+                    </motion.div>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </motion.div>
+
+          {/* Benefits */}
+          <motion.div
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-20"
+          >
+            <div className="text-center mb-12">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Why Choose <span className="gradient-text">Our Platform</span>
+              </h2>
+              <p className="text-xl text-gray-600">Benefits that make booking effortless</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {benefits.map((benefit, index) => {
+                const Icon = benefit.icon;
+                return (
+                  <motion.div
+                    key={index}
+                    whileHover={{ scale: 1.05, y: -10 }}
+                    className="glass p-6 rounded-2xl border border-gray-200/50 text-center"
+                  >
+                    <div className="inline-flex w-16 h-16 bg-gradient-to-br from-primary-500 to-purple-600 rounded-xl items-center justify-center mb-4">
+                      <Icon className="text-3xl text-white" />
+                    </div>
+                    <h3 className="text-lg font-bold text-gray-900 mb-2">{benefit.title}</h3>
+                    <p className="text-gray-600 text-sm">{benefit.description}</p>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="glass rounded-3xl border border-gray-200/50 p-12 text-center"
+          >
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Ready to <span className="gradient-text">Get Started?</span>
+            </h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Join thousands of users booking courts effortlessly
+            </p>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Link to="/courts">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-bold text-lg shadow-lg"
+                >
+                  Browse Courts
+                </motion.button>
+              </Link>
+              <Link to="/auth/register">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-4 bg-white border-2 border-primary-500 text-primary-700 rounded-xl font-bold text-lg shadow-lg"
+                >
+                  Sign Up Free
+                </motion.button>
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </div>
-    </section>
-  );
-};
-
-const CTASection = () => {
-  const [ref, inView] = useInView({ threshold: 0.3, triggerOnce: true });
-
-  return (
-    <section className="py-32 bg-gradient-to-r from-primary-600 to-secondary-600" ref={ref}>
-      <div className="container mx-auto px-4">
-        <motion.div
-          className="text-center"
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={inView ? { opacity: 1, scale: 1 } : {}}
-        >
-          <h2 className="text-5xl font-bold text-white mb-6">Ready to Get Started?</h2>
-          <motion.button
-            className="px-12 py-5 bg-white text-primary-600 font-bold rounded-xl text-xl"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Book Your Court Now
-          </motion.button>
-        </motion.div>
-      </div>
-    </section>
+    </div>
   );
 };
 
