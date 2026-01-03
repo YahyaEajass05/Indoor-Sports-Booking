@@ -1,3 +1,5 @@
+import AuthNavbar from '../../components/layout/AuthNavbar';
+import PublicBackground from '../../components/layout/PublicBackground';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
@@ -125,7 +127,7 @@ const EmailVerification = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen">`n      {/* Auth Navbar */}`n      <AuthNavbar />`n`n      {/* Animated Background */}`n      <PublicBackground variant="gradient" />`n
       <motion.div
         className="absolute inset-0 opacity-30"
         style={{

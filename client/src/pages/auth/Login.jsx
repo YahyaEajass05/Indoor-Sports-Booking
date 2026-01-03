@@ -16,6 +16,7 @@ import {
 import { SiGoogle, SiFacebook, SiApple } from 'react-icons/si';
 import PublicBackground from '../../components/layout/PublicBackground';
 import AuthPageWrapper from './AuthPageWrapper';
+import AuthNavbar from '../../components/layout/AuthNavbar';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -106,8 +107,11 @@ const Login = () => {
       {/* Animated Background */}
       <PublicBackground variant="gradient" />
 
+      {/* Auth Page Navbar */}
+      <AuthNavbar />
+
       {/* Main Content Container */}
-      <div className="container mx-auto max-w-7xl relative z-10">
+      <div className="container mx-auto max-w-7xl relative z-10 mt-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Side - Branding & Features */}
           <motion.div

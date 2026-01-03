@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
+import AuthNavbar from '../../components/layout/AuthNavbar';
+import PublicBackground from '../../components/layout/PublicBackground';
 import {
   FiMail,
   FiLock,
@@ -185,10 +187,16 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800 relative overflow-hidden">
+      {/* Auth Navbar */}
+      <AuthNavbar />
+
+      {/* Public Background */}
+      <PublicBackground variant="gradient" />
+
       {/* Animated Background */}
       <motion.div
-        className="absolute inset-0 opacity-30"
+        className="absolute inset-0 opacity-30 pointer-events-none"
         style={{
           background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(139, 92, 246, 0.3) 0%, transparent 50%)`
         }}
@@ -206,7 +214,7 @@ const Register = () => {
         className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-blue-400/20 to-purple-400/20 rounded-full blur-3xl"
       />
 
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10 pt-24 px-6">
         {/* Left Side - Branding */}
         <motion.div
           initial={{ opacity: 0, x: -50 }}
