@@ -125,7 +125,7 @@ const EmailVerification = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen">
       <motion.div
         className="absolute inset-0 opacity-30"
         style={{
@@ -180,18 +180,18 @@ const EmailVerification = () => {
                     >
                       <FiMail className="text-4xl text-white" />
                     </motion.div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Verify Your Email</h2>
-                    <p className="text-gray-600 mb-4">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Verify Your Email</h2>
+                    <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-4">
                       We've sent a verification code to
                     </p>
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-100 rounded-lg">
                       <FiMail className="text-purple-600" />
-                      <span className="font-semibold text-gray-900">{email}</span>
+                      <span className="font-semibold text-gray-900 dark:text-white">{email}</span>
                     </div>
                   </motion.div>
 
                   <motion.div variants={itemVariants} className="mb-8">
-                    <label className="block text-sm font-semibold text-gray-700 mb-4 text-center">
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-4 text-center">
                       Enter 6-Digit Code
                     </label>
                     <div className="flex gap-2 justify-center" onPaste={handlePaste}>
@@ -233,12 +233,12 @@ const EmailVerification = () => {
                         transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                         className="inline-block w-8 h-8 border-4 border-purple-500 border-t-transparent rounded-full"
                       />
-                      <p className="text-sm text-gray-600 mt-2">Verifying...</p>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 mt-2">Verifying...</p>
                     </motion.div>
                   )}
 
                   <motion.div variants={itemVariants} className="text-center mb-8">
-                    <p className="text-sm text-gray-600 mb-3">Didn't receive the code?</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-3">Didn't receive the code?</p>
                     <motion.button
                       onClick={handleResend}
                       disabled={!canResend}
@@ -274,7 +274,7 @@ const EmailVerification = () => {
                   </motion.div>
 
                   <motion.div variants={itemVariants} className="mt-6 text-center">
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">
                       Wrong email?{' '}
                       <Link to="/auth/register" className="font-semibold text-purple-600 hover:text-purple-700">
                         Go back
@@ -308,7 +308,7 @@ const EmailVerification = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-2xl font-bold text-gray-900 mb-2"
+                    className="text-2xl font-bold text-gray-900 dark:text-white mb-2"
                   >
                     Email Verified!
                   </motion.h3>
@@ -317,7 +317,7 @@ const EmailVerification = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-gray-600 mb-2"
+                    className="text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-2"
                   >
                     Your email has been successfully verified.
                   </motion.p>
@@ -326,7 +326,7 @@ const EmailVerification = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5 }}
-                    className="text-sm text-gray-500 mb-8"
+                    className="text-sm text-gray-500 dark:text-gray-400 dark:text-gray-500 mb-8"
                   >
                     Redirecting to login...
                   </motion.p>
@@ -362,7 +362,7 @@ const EmailVerification = () => {
           transition={{ delay: 0.8 }}
           className="mt-6 text-center"
         >
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">
             Need help?{' '}
             <Link to="/contact" className="font-semibold text-purple-600 hover:text-purple-700">
               Contact Support

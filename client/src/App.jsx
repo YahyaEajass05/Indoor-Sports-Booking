@@ -25,6 +25,26 @@ import FAQ from './pages/public/FAQ';
 import Terms from './pages/public/Terms';
 import PrivacyPolicy from './pages/public/PrivacyPolicy';
 
+// Import auth pages
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+import ForgotPassword from './pages/auth/ForgotPassword';
+import ResetPassword from './pages/auth/ResetPassword';
+import EmailVerification from './pages/auth/EmailVerification';
+
+// Import dashboard layout
+import { DashboardLayout } from './components/dashboard';
+
+// Import user dashboard pages
+import UserDashboard from './pages/dashboards/user/UserDashboard';
+import UpcomingBookings from './pages/dashboards/user/UpcomingBookings';
+import BookingHistory from './pages/dashboards/user/BookingHistory';
+import CancelledBookings from './pages/dashboards/user/CancelledBookings';
+import SavedCourts from './pages/dashboards/user/SavedCourts';
+import UserProfile from './pages/dashboards/user/Profile';
+import UserNotifications from './pages/dashboards/user/Notifications';
+import SecuritySettings from './pages/dashboards/user/SecuritySettings';
+
 function App() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
@@ -53,29 +73,114 @@ function App() {
       {/* Scroll Progress Indicator */}
       <ScrollProgressBar position="top" />
 
-      <div className="min-h-screen">
-        {/* Navigation Bar */}
-        <Navbar />
-
-        {/* Main Content with Page Transitions */}
-        <PageTransition variant="fade">
-          <main className="pt-20">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/courts" element={<Courts />} />
-              <Route path="/about" element={<AboutUs />} />
-              <Route path="/how-it-works" element={<HowItWorks />} />
-              <Route path="/contact" element={<ContactUs />} />
-              <Route path="/faq" element={<FAQ />} />
-              <Route path="/terms" element={<Terms />} />
-              <Route path="/privacy" element={<PrivacyPolicy />} />
-            </Routes>
-          </main>
-        </PageTransition>
-
-        {/* Footer */}
-        <Footer />
-      </div>
+      <Routes>
+        {/* Public Routes with Navbar and Footer */}
+        <Route path="/" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <Home />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/courts" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <Courts />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/about" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <AboutUs />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/how-it-works" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <HowItWorks />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/contact" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <ContactUs />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/faq" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <FAQ />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/terms" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <Terms />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        <Route path="/privacy" element={
+          <div className="min-h-screen">
+            <Navbar />
+            <PageTransition variant="fade">
+              <main className="pt-20">
+                <PrivacyPolicy />
+              </main>
+            </PageTransition>
+            <Footer />
+          </div>
+        } />
+        
+        {/* Auth Routes (No Navbar/Footer) */}
+        <Route path="/auth/login" element={<Login />} />
+        <Route path="/auth/register" element={<Register />} />
+        <Route path="/auth/forgot-password" element={<ForgotPassword />} />
+        <Route path="/auth/reset-password" element={<ResetPassword />} />
+        <Route path="/auth/verify-email" element={<EmailVerification />} />
+        
+        {/* User Dashboard Routes (DashboardLayout has its own navigation) */}
+        <Route path="/dashboard/user" element={<DashboardLayout userRole="user"><UserDashboard /></DashboardLayout>} />
+        <Route path="/dashboard/user/upcoming-bookings" element={<DashboardLayout userRole="user"><UpcomingBookings /></DashboardLayout>} />
+        <Route path="/dashboard/user/booking-history" element={<DashboardLayout userRole="user"><BookingHistory /></DashboardLayout>} />
+        <Route path="/dashboard/user/cancelled-bookings" element={<DashboardLayout userRole="user"><CancelledBookings /></DashboardLayout>} />
+        <Route path="/dashboard/user/saved-courts" element={<DashboardLayout userRole="user"><SavedCourts /></DashboardLayout>} />
+        <Route path="/dashboard/user/profile" element={<DashboardLayout userRole="user"><UserProfile /></DashboardLayout>} />
+        <Route path="/dashboard/user/notifications" element={<DashboardLayout userRole="user"><UserNotifications /></DashboardLayout>} />
+        <Route path="/dashboard/user/security-settings" element={<DashboardLayout userRole="user"><SecuritySettings /></DashboardLayout>} />
+      </Routes>
     </ThemeProvider>
   );
 }

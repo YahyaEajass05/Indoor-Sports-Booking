@@ -114,7 +114,7 @@ const ResetPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 via-white to-emerald-50 flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen">
       <motion.div
         className="absolute inset-0 opacity-30"
         style={{
@@ -158,15 +158,15 @@ const ResetPassword = () => {
                     >
                       <FiLock className="text-4xl text-white" />
                     </motion.div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Reset Password</h2>
-                    <p className="text-gray-600">Create a new strong password for your account</p>
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Reset Password</h2>
+                    <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500">Create a new strong password for your account</p>
                   </motion.div>
 
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <motion.div variants={itemVariants}>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">New Password</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">New Password</label>
                       <div className="relative">
-                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl" />
                         <motion.input
                           type={showPassword ? 'text' : 'password'}
                           name="password"
@@ -184,7 +184,7 @@ const ResetPassword = () => {
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"
                         >
                           {showPassword ? <FiEyeOff className="text-xl" /> : <FiEye className="text-xl" />}
                         </button>
@@ -202,7 +202,7 @@ const ResetPassword = () => {
                               />
                             ))}
                           </div>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 dark:text-gray-500">
                             Strength: <span className="font-semibold">{strengthLabels[passwordStrength - 1] || 'Very Weak'}</span>
                           </p>
                         </div>
@@ -216,9 +216,9 @@ const ResetPassword = () => {
                     </motion.div>
 
                     <motion.div variants={itemVariants}>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
                       <div className="relative">
-                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl" />
                         <motion.input
                           type={showConfirmPassword ? 'text' : 'password'}
                           name="confirmPassword"
@@ -236,7 +236,7 @@ const ResetPassword = () => {
                         <button
                           type="button"
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"
                         >
                           {showConfirmPassword ? <FiEyeOff className="text-xl" /> : <FiEye className="text-xl" />}
                         </button>
@@ -314,7 +314,7 @@ const ResetPassword = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-2xl font-bold text-gray-900 mb-2"
+                    className="text-2xl font-bold text-gray-900 dark:text-white mb-2"
                   >
                     Password Reset Successful!
                   </motion.h3>
@@ -323,7 +323,7 @@ const ResetPassword = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-gray-600 mb-6"
+                    className="text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-6"
                   >
                     Your password has been successfully reset. Redirecting to login...
                   </motion.p>

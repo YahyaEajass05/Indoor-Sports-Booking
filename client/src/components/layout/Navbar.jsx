@@ -357,8 +357,32 @@ const Navbar = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Profile Dropdown */}
-              <div className="relative" ref={profileRef}>
+              {/* Auth Buttons (when not logged in) - TODO: Add auth state management */}
+              <div className="hidden md:flex items-center space-x-3">
+                <motion.button
+                  onClick={() => navigate('/auth/login')}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-colors ${
+                    isDark 
+                      ? 'text-gray-300 hover:text-white hover:bg-gray-800' 
+                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Login
+                </motion.button>
+                <motion.button
+                  onClick={() => navigate('/auth/register')}
+                  className="px-4 py-2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg font-medium text-sm shadow-lg hover:shadow-xl transition-all"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Sign Up
+                </motion.button>
+              </div>
+
+              {/* Profile Dropdown (when logged in) - Currently shown, TODO: Add conditional rendering based on auth state */}
+              <div className="relative hidden" ref={profileRef}>
                 <motion.button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2 p-1.5 rounded-full hover:bg-gray-100 transition-colors duration-200"
@@ -505,6 +529,32 @@ const Navbar = () => {
                     </motion.div>
                   ))}
                 </nav>
+
+                {/* Mobile Auth Buttons */}
+                <div className="mt-6 space-y-3 px-4">
+                  <motion.button
+                    onClick={() => {
+                      navigate('/auth/login');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 border-2 border-primary-500 text-primary-600 rounded-lg font-medium text-sm hover:bg-primary-50 transition-colors"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Login
+                  </motion.button>
+                  <motion.button
+                    onClick={() => {
+                      navigate('/auth/register');
+                      setIsMobileMenuOpen(false);
+                    }}
+                    className="w-full px-4 py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-lg font-medium text-sm shadow-lg"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    Sign Up
+                  </motion.button>
+                </div>
               </div>
             </motion.div>
           </>

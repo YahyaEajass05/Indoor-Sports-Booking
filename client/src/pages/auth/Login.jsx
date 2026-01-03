@@ -14,7 +14,8 @@ import {
   FiZap
 } from 'react-icons/fi';
 import { SiGoogle, SiFacebook, SiApple } from 'react-icons/si';
-import { Button } from '../../components/common/Button';
+import PublicBackground from '../../components/layout/PublicBackground';
+import AuthPageWrapper from './AuthPageWrapper';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -27,89 +28,62 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [focusedField, setFocusedField] = useState(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
-  // Track mouse position for interactive background
-  useEffect(() => {
-    const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
-      });
-    };
-
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-
-  const validateEmail = (email) => {
-    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return re.test(email);
-  };
-
-  const handleInputChange = (e) => {
+  const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [name]: type === 'checkbox' ? checked : value
-    });
-
+    }));
     // Clear error when user starts typing
     if (errors[name]) {
-      setErrors({ ...errors, [name]: '' });
+      setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    // Validation
+  const validateForm = () => {
     const newErrors = {};
     if (!formData.email) {
       newErrors.email = 'Email is required';
-    } else if (!validateEmail(formData.email)) {
-      newErrors.email = 'Invalid email format';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
     }
-    
     if (!formData.password) {
       newErrors.password = 'Password is required';
     } else if (formData.password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
+    return newErrors;
+  };
 
-    if (Object.keys(newErrors).length > 0) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const newErrors = validateForm();
+    
+    if (Object.keys(newErrors).length === 0) {
+      setIsLoading(true);
+      // Simulate API call
+      setTimeout(() => {
+        console.log('Login:', formData);
+        setIsLoading(false);
+        // Redirect to user dashboard after successful login
+        navigate('/dashboard/user');
+      }, 1500);
+    } else {
       setErrors(newErrors);
-      return;
     }
-
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Login:', formData);
-      setIsLoading(false);
-      // Navigate to dashboard
-      navigate('/dashboard/user');
-    }, 2000);
   };
 
   const handleSocialLogin = (provider) => {
-    console.log('Social login:', provider);
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      navigate('/dashboard/user');
-    }, 1500);
+    console.log(`Login with ${provider}`);
   };
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2
+        staggerChildren: 0.1
       }
     }
   };
@@ -127,319 +101,278 @@ const Login = () => {
     }
   };
 
-  const floatingVariants = {
-    animate: {
-      y: [0, -20, 0],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: 'easeInOut'
-      }
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-50 via-white to-purple-50 flex items-center justify-center p-6 relative overflow-hidden">
-      {/* Animated Background Elements */}
-      <motion.div
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(59, 130, 246, 0.3) 0%, transparent 50%)`
-        }}
-      />
-      
-      {/* Floating Shapes */}
-      <motion.div
-        variants={floatingVariants}
-        animate="animate"
-        className="absolute top-20 left-20 w-32 h-32 bg-gradient-to-br from-primary-400/20 to-purple-400/20 rounded-full blur-3xl"
-      />
-      <motion.div
-        variants={floatingVariants}
-        animate="animate"
-        style={{ animationDelay: '1s' }}
-        className="absolute bottom-20 right-20 w-40 h-40 bg-gradient-to-br from-purple-400/20 to-pink-400/20 rounded-full blur-3xl"
-      />
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+      {/* Animated Background */}
+      <PublicBackground variant="gradient" />
 
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 relative z-10">
-        {/* Left Side - Branding */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="hidden lg:flex flex-col justify-center space-y-8"
-        >
-          <div>
+      {/* Main Content Container */}
+      <div className="container mx-auto max-w-7xl relative z-10">
+        <div className="grid lg:grid-cols-2 gap-12 items-center">
+          {/* Left Side - Branding & Features */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="hidden lg:block"
+          >
             <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.2, type: 'spring', stiffness: 200 }}
-              className="inline-flex items-center gap-3 mb-6"
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
             >
-              <div className="w-16 h-16 bg-gradient-to-br from-primary-500 to-purple-600 rounded-2xl flex items-center justify-center shadow-lg">
-                <FiZap className="text-3xl text-white" />
-              </div>
-              <div>
-                <h1 className="text-3xl font-bold gradient-text">CourtBooker</h1>
-                <p className="text-sm text-gray-600">Indoor Sports Booking</p>
-              </div>
-            </motion.div>
+              {/* Logo */}
+              <motion.div variants={itemVariants} className="flex items-center gap-4 mb-8">
+                <div className="w-16 h-16 bg-gradient-to-br from-primary-500 via-secondary-500 to-accent-500 rounded-2xl flex items-center justify-center shadow-2xl">
+                  <FiZap className="text-3xl text-white" />
+                </div>
+                <div>
+                  <h1 className="text-3xl font-bold gradient-text-animated">CourtBooker</h1>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Indoor Sports Booking</p>
+                </div>
+              </motion.div>
 
-            <motion.h2
-              variants={itemVariants}
-              className="text-5xl font-bold text-gray-900 mb-4 leading-tight"
-            >
-              Welcome Back to Your
-              <span className="gradient-text"> Sports Hub</span>
-            </motion.h2>
-            <motion.p
-              variants={itemVariants}
-              className="text-xl text-gray-600 mb-8"
-            >
-              Access your bookings, manage your profile, and discover new courts.
-            </motion.p>
-          </div>
-
-          {/* Feature List */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="space-y-4"
-          >
-            {[
-              { icon: FiCheck, text: 'Easy booking management' },
-              { icon: FiShield, text: 'Secure payment processing' },
-              { icon: FiUser, text: 'Personalized experience' }
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
+              <motion.h2
                 variants={itemVariants}
-                whileHover={{ scale: 1.05, x: 10 }}
-                className="flex items-center gap-4 p-4 glass rounded-2xl border border-gray-200/50"
+                className="text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
               >
-                <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl flex items-center justify-center">
-                  <feature.icon className="text-2xl text-white" />
-                </div>
-                <span className="text-lg font-semibold text-gray-900">{feature.text}</span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </motion.div>
+                Welcome Back to Your
+                <span className="gradient-text-animated block"> Sports Hub</span>
+              </motion.h2>
+              <motion.p
+                variants={itemVariants}
+                className="text-xl text-gray-600 dark:text-gray-400 mb-8"
+              >
+                Access your bookings, manage your profile, and discover new courts.
+              </motion.p>
+            </motion.div>
 
-        {/* Right Side - Login Form */}
-        <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.6 }}
-          className="glass rounded-3xl border border-gray-200/50 p-8 lg:p-12 shadow-2xl relative overflow-hidden"
-        >
-          {/* Decorative Elements */}
-          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary-400/10 to-purple-400/10 rounded-full blur-3xl -z-10" />
-          
+            {/* Feature List */}
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="space-y-4"
+            >
+              {[
+                { icon: FiCheck, text: 'Easy booking management', color: 'from-green-500 to-emerald-600' },
+                { icon: FiShield, text: 'Secure payment processing', color: 'from-blue-500 to-cyan-600' },
+                { icon: FiUser, text: 'Personalized experience', color: 'from-purple-500 to-pink-600' }
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  variants={itemVariants}
+                  whileHover={{ scale: 1.05, x: 10 }}
+                  className="flex items-center gap-4 p-4 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-2xl border border-gray-200/50 dark:border-gray-700/50"
+                >
+                  <div className={`w-12 h-12 bg-gradient-to-br ${feature.color} rounded-xl flex items-center justify-center shadow-lg`}>
+                    <feature.icon className="text-2xl text-white" />
+                  </div>
+                  <span className="text-lg font-semibold text-gray-900 dark:text-white">{feature.text}</span>
+                </motion.div>
+              ))}
+            </motion.div>
+          </motion.div>
+
+          {/* Right Side - Login Form */}
           <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="relative z-10"
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="w-full max-w-md mx-auto"
           >
-            {/* Header */}
-            <motion.div variants={itemVariants} className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Sign In</h2>
-              <p className="text-gray-600">Login to your account to continue</p>
-            </motion.div>
-
-            {/* Social Login */}
-            <motion.div variants={itemVariants} className="space-y-3 mb-8">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleSocialLogin('google')}
-                className="w-full p-4 flex items-center justify-center gap-3 border-2 border-gray-200 rounded-xl hover:border-primary-300 hover:bg-primary-50 transition-all font-semibold text-gray-700"
+            <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl rounded-3xl border border-gray-200/50 dark:border-gray-700/50 p-8 lg:p-12 shadow-2xl">
+              <motion.div
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
               >
-                <SiGoogle className="text-xl text-red-500" />
-                Continue with Google
-              </motion.button>
-              
-              <div className="grid grid-cols-2 gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSocialLogin('facebook')}
-                  className="p-4 flex items-center justify-center gap-2 border-2 border-gray-200 rounded-xl hover:border-blue-300 hover:bg-blue-50 transition-all font-semibold text-gray-700"
-                >
-                  <SiFacebook className="text-xl text-blue-600" />
-                  Facebook
-                </motion.button>
-                
-                <motion.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSocialLogin('apple')}
-                  className="p-4 flex items-center justify-center gap-2 border-2 border-gray-200 rounded-xl hover:border-gray-400 hover:bg-gray-50 transition-all font-semibold text-gray-700"
-                >
-                  <SiApple className="text-xl text-gray-900" />
-                  Apple
-                </motion.button>
-              </div>
-            </motion.div>
+                {/* Header */}
+                <motion.div variants={itemVariants} className="text-center mb-8">
+                  <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Sign In</h2>
+                  <p className="text-gray-600 dark:text-gray-400">Login to your account to continue</p>
+                </motion.div>
 
-            {/* Divider */}
-            <motion.div variants={itemVariants} className="relative mb-8">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-white text-gray-500 font-medium">Or continue with email</span>
-              </div>
-            </motion.div>
-
-            {/* Login Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email Field */}
-              <motion.div variants={itemVariants}>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Email Address
-                </label>
-                <div className="relative">
-                  <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-                  <motion.input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    onFocus={() => setFocusedField('email')}
-                    onBlur={() => setFocusedField(null)}
-                    animate={{
-                      scale: focusedField === 'email' ? 1.02 : 1,
-                      borderColor: focusedField === 'email' ? 'rgb(59, 130, 246)' : errors.email ? 'rgb(239, 68, 68)' : 'rgb(229, 231, 235)'
-                    }}
-                    className="w-full pl-12 pr-4 py-4 border-2 rounded-xl focus:outline-none transition-all"
-                    placeholder="john.doe@example.com"
-                  />
-                </div>
-                <AnimatePresence>
-                  {errors.email && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="mt-2 text-sm text-red-600 flex items-center gap-1"
-                    >
-                      <FiAlertCircle /> {errors.email}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </motion.div>
-
-              {/* Password Field */}
-              <motion.div variants={itemVariants}>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">
-                  Password
-                </label>
-                <div className="relative">
-                  <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
-                  <motion.input
-                    type={showPassword ? 'text' : 'password'}
-                    name="password"
-                    value={formData.password}
-                    onChange={handleInputChange}
-                    onFocus={() => setFocusedField('password')}
-                    onBlur={() => setFocusedField(null)}
-                    animate={{
-                      scale: focusedField === 'password' ? 1.02 : 1,
-                      borderColor: focusedField === 'password' ? 'rgb(59, 130, 246)' : errors.password ? 'rgb(239, 68, 68)' : 'rgb(229, 231, 235)'
-                    }}
-                    className="w-full pl-12 pr-12 py-4 border-2 rounded-xl focus:outline-none transition-all"
-                    placeholder="Enter your password"
-                  />
-                  <motion.button
-                    type="button"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                {/* Social Login */}
+                <motion.div variants={itemVariants} className="space-y-3 mb-6">
+                  <button
+                    onClick={() => handleSocialLogin('google')}
+                    className="w-full p-4 flex items-center justify-center gap-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary-300 dark:hover:border-primary-600 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all font-semibold text-gray-700 dark:text-gray-300"
                   >
-                    {showPassword ? <FiEyeOff className="text-xl" /> : <FiEye className="text-xl" />}
-                  </motion.button>
-                </div>
-                <AnimatePresence>
-                  {errors.password && (
-                    <motion.p
-                      initial={{ opacity: 0, y: -10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0 }}
-                      className="mt-2 text-sm text-red-600 flex items-center gap-1"
+                    <SiGoogle className="text-xl text-red-500" />
+                    Continue with Google
+                  </button>
+                  
+                  <div className="grid grid-cols-2 gap-3">
+                    <button
+                      onClick={() => handleSocialLogin('facebook')}
+                      className="p-4 flex items-center justify-center gap-2 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-blue-300 dark:hover:border-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all font-semibold text-gray-700 dark:text-gray-300"
                     >
-                      <FiAlertCircle /> {errors.password}
-                    </motion.p>
-                  )}
-                </AnimatePresence>
-              </motion.div>
+                      <SiFacebook className="text-xl text-blue-600" />
+                    </button>
+                    <button
+                      onClick={() => handleSocialLogin('apple')}
+                      className="p-4 flex items-center justify-center gap-2 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-gray-400 dark:hover:border-gray-500 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-all font-semibold text-gray-700 dark:text-gray-300"
+                    >
+                      <SiApple className="text-xl text-gray-900 dark:text-white" />
+                    </button>
+                  </div>
+                </motion.div>
 
-              {/* Remember Me & Forgot Password */}
-              <motion.div variants={itemVariants} className="flex items-center justify-between">
-                <label className="flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    name="rememberMe"
-                    checked={formData.rememberMe}
-                    onChange={handleInputChange}
-                    className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-2 focus:ring-primary-500 cursor-pointer"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700">Remember me</span>
-                </label>
-                
-                <Link
-                  to="/auth/forgot-password"
-                  className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors"
-                >
-                  Forgot password?
-                </Link>
-              </motion.div>
+                {/* Divider */}
+                <motion.div variants={itemVariants} className="relative my-8">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 font-medium">Or continue with email</span>
+                  </div>
+                </motion.div>
 
-              {/* Submit Button */}
-              <motion.div variants={itemVariants}>
-                <motion.button
-                  type="submit"
-                  disabled={isLoading}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="w-full py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
-                >
-                  {isLoading ? (
-                    <>
-                      <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                        className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
+                {/* Login Form */}
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  {/* Email Field */}
+                  <motion.div variants={itemVariants}>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl" />
+                      <input
+                        type="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('email')}
+                        onBlur={() => setFocusedField(null)}
+                        className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl transition-all outline-none text-gray-900 dark:text-white bg-white dark:bg-gray-900 ${
+                          errors.email
+                            ? 'border-red-500 dark:border-red-500'
+                            : focusedField === 'email'
+                            ? 'border-primary-500 dark:border-primary-400 ring-4 ring-primary-100 dark:ring-primary-900/50'
+                            : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600'
+                        }`}
+                        placeholder="you@example.com"
                       />
-                      Signing In...
-                    </>
-                  ) : (
-                    <>
-                      Sign In
-                      <FiArrowRight className="text-xl" />
-                    </>
-                  )}
-                </motion.button>
-              </motion.div>
-            </form>
+                      {errors.email && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="absolute -bottom-6 left-0 flex items-center gap-1 text-red-500 text-xs"
+                        >
+                          <FiAlertCircle />
+                          {errors.email}
+                        </motion.div>
+                      )}
+                    </div>
+                  </motion.div>
 
-            {/* Sign Up Link */}
-            <motion.div variants={itemVariants} className="mt-8 text-center">
-              <p className="text-gray-600">
-                Don't have an account?{' '}
-                <Link
-                  to="/auth/register"
-                  className="font-bold text-primary-600 hover:text-primary-700 transition-colors"
-                >
-                  Sign up for free
-                </Link>
-              </p>
-            </motion.div>
+                  {/* Password Field */}
+                  <motion.div variants={itemVariants}>
+                    <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                      Password
+                    </label>
+                    <div className="relative">
+                      <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl" />
+                      <input
+                        type={showPassword ? 'text' : 'password'}
+                        name="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        onFocus={() => setFocusedField('password')}
+                        onBlur={() => setFocusedField(null)}
+                        className={`w-full pl-12 pr-12 py-4 border-2 rounded-xl transition-all outline-none text-gray-900 dark:text-white bg-white dark:bg-gray-900 ${
+                          errors.password
+                            ? 'border-red-500 dark:border-red-500'
+                            : focusedField === 'password'
+                            ? 'border-primary-500 dark:border-primary-400 ring-4 ring-primary-100 dark:ring-primary-900/50'
+                            : 'border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600'
+                        }`}
+                        placeholder="Enter your password"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300"
+                      >
+                        {showPassword ? <FiEyeOff className="text-xl" /> : <FiEye className="text-xl" />}
+                      </button>
+                      {errors.password && (
+                        <motion.div
+                          initial={{ opacity: 0, y: -10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="absolute -bottom-6 left-0 flex items-center gap-1 text-red-500 text-xs"
+                        >
+                          <FiAlertCircle />
+                          {errors.password}
+                        </motion.div>
+                      )}
+                    </div>
+                  </motion.div>
+
+                  {/* Remember Me & Forgot Password */}
+                  <motion.div variants={itemVariants} className="flex items-center justify-between">
+                    <label className="flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        name="rememberMe"
+                        checked={formData.rememberMe}
+                        onChange={handleChange}
+                        className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-primary-600 focus:ring-primary-500 dark:bg-gray-800"
+                      />
+                      <span className="ml-2 text-sm font-medium text-gray-700 dark:text-gray-300">Remember me</span>
+                    </label>
+                    <Link
+                      to="/auth/forgot-password"
+                      className="text-sm font-semibold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                    >
+                      Forgot password?
+                    </Link>
+                  </motion.div>
+
+                  {/* Submit Button */}
+                  <motion.button
+                    variants={itemVariants}
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full py-4 bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white rounded-xl font-bold text-lg shadow-lg hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    {isLoading ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                          className="w-5 h-5 border-2 border-white border-t-transparent rounded-full"
+                        />
+                        Signing in...
+                      </>
+                    ) : (
+                      <>
+                        Sign In
+                        <FiArrowRight />
+                      </>
+                    )}
+                  </motion.button>
+                </form>
+
+                {/* Sign Up Link */}
+                <motion.div variants={itemVariants} className="mt-6 text-center">
+                  <p className="text-gray-600 dark:text-gray-400">
+                    Don't have an account?{' '}
+                    <Link
+                      to="/auth/register"
+                      className="font-bold text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 transition-colors"
+                    >
+                      Sign up for free
+                    </Link>
+                  </p>
+                </motion.div>
+              </motion.div>
+            </div>
           </motion.div>
-        </motion.div>
+        </div>
       </div>
     </div>
   );

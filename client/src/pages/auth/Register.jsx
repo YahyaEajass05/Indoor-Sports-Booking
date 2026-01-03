@@ -185,7 +185,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50 flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen">
       {/* Animated Background */}
       <motion.div
         className="absolute inset-0 opacity-30"
@@ -226,20 +226,20 @@ const Register = () => {
               </div>
               <div>
                 <h1 className="text-3xl font-bold gradient-text">CourtBooker</h1>
-                <p className="text-sm text-gray-600">Indoor Sports Booking</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">Indoor Sports Booking</p>
               </div>
             </motion.div>
 
             <motion.h2
               variants={itemVariants}
-              className="text-5xl font-bold text-gray-900 mb-4 leading-tight"
+              className="text-5xl font-bold text-gray-900 dark:text-white mb-4 leading-tight"
             >
               Join Thousands of
               <span className="gradient-text"> Sports Enthusiasts</span>
             </motion.h2>
             <motion.p
               variants={itemVariants}
-              className="text-xl text-gray-600 mb-8"
+              className="text-xl text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-8"
             >
               Create your account and start booking courts in minutes.
             </motion.p>
@@ -284,12 +284,12 @@ const Register = () => {
                     {isCompleted ? (
                       <FiCheckCircle className="text-2xl text-white" />
                     ) : (
-                      <Icon className={`text-2xl ${isCurrent ? 'text-white' : 'text-gray-500'}`} />
+                      <Icon className={`text-2xl ${isCurrent ? 'text-white' : 'text-gray-500 dark:text-gray-400 dark:text-gray-500'}`} />
                     )}
                   </div>
                   <div>
-                    <p className="text-sm text-gray-600">Step {item.step}</p>
-                    <p className="font-semibold text-gray-900">{item.title}</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">Step {item.step}</p>
+                    <p className="font-semibold text-gray-900 dark:text-white">{item.title}</p>
                   </div>
                 </motion.div>
               );
@@ -314,8 +314,8 @@ const Register = () => {
           >
             {/* Header */}
             <motion.div variants={itemVariants} className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Create Account</h2>
-              <p className="text-gray-600">Step {currentStep} of {totalSteps}</p>
+              <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Create Account</h2>
+              <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500">Step {currentStep} of {totalSteps}</p>
             </motion.div>
 
             {/* Progress Bar */}
@@ -337,7 +337,7 @@ const Register = () => {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleSocialRegister('google')}
-                  className="w-full p-4 flex items-center justify-center gap-3 border-2 border-gray-200 rounded-xl hover:border-primary-300 hover:bg-primary-50 transition-all font-semibold text-gray-700"
+                  className="w-full p-4 flex items-center justify-center gap-3 border-2 border-gray-200 dark:border-gray-700 rounded-xl hover:border-primary-300 hover:bg-primary-50 transition-all font-semibold text-gray-700 dark:text-gray-300"
                 >
                   <SiGoogle className="text-xl text-red-500" />
                   Sign up with Google
@@ -345,10 +345,10 @@ const Register = () => {
 
                 <div className="relative mb-6">
                   <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
+                    <div className="w-full border-t border-gray-300 dark:border-gray-700"></div>
                   </div>
                   <div className="relative flex justify-center text-sm">
-                    <span className="px-4 bg-white text-gray-500 font-medium">Or sign up with email</span>
+                    <span className="px-4 bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 dark:text-gray-500 font-medium">Or sign up with email</span>
                   </div>
                 </div>
               </motion.div>
@@ -369,7 +369,7 @@ const Register = () => {
                   >
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
+                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">First Name</label>
                         <input
                           type="text"
                           name="firstName"
@@ -385,7 +385,7 @@ const Register = () => {
                         )}
                       </div>
                       <div>
-                        <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
+                        <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Last Name</label>
                         <input
                           type="text"
                           name="lastName"
@@ -403,9 +403,9 @@ const Register = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Email</label>
                       <div className="relative">
-                        <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                         <input
                           type="email"
                           name="email"
@@ -423,9 +423,9 @@ const Register = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Phone</label>
                       <div className="relative">
-                        <FiPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiPhone className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                         <input
                           type="tel"
                           name="phone"
@@ -455,9 +455,9 @@ const Register = () => {
                     className="space-y-4"
                   >
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Password</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Password</label>
                       <div className="relative">
-                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                         <input
                           type={showPassword ? 'text' : 'password'}
                           name="password"
@@ -469,7 +469,7 @@ const Register = () => {
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"
                         >
                           {showPassword ? <FiEyeOff /> : <FiEye />}
                         </button>
@@ -487,7 +487,7 @@ const Register = () => {
                               />
                             ))}
                           </div>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 dark:text-gray-500">
                             Strength: <span className="font-semibold">{strengthLabels[passwordStrength - 1] || 'Very Weak'}</span>
                           </p>
                         </div>
@@ -500,9 +500,9 @@ const Register = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Confirm Password</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Confirm Password</label>
                       <div className="relative">
-                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiLock className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                         <input
                           type={showConfirmPassword ? 'text' : 'password'}
                           name="confirmPassword"
@@ -514,7 +514,7 @@ const Register = () => {
                         <button
                           type="button"
                           onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400"
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500"
                         >
                           {showConfirmPassword ? <FiEyeOff /> : <FiEye />}
                         </button>
@@ -539,9 +539,9 @@ const Register = () => {
                     className="space-y-4"
                   >
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Address</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Address</label>
                       <div className="relative">
-                        <FiMapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                        <FiMapPin className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500" />
                         <input
                           type="text"
                           name="address"
@@ -559,7 +559,7 @@ const Register = () => {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">City</label>
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">City</label>
                       <input
                         type="text"
                         name="city"
@@ -582,9 +582,9 @@ const Register = () => {
                           name="termsAccepted"
                           checked={formData.termsAccepted}
                           onChange={handleInputChange}
-                          className="w-5 h-5 text-primary-600 border-gray-300 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
+                          className="w-5 h-5 text-primary-600 border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-primary-500 mt-0.5"
                         />
-                        <span className="ml-3 text-sm text-gray-700">
+                        <span className="ml-3 text-sm text-gray-700 dark:text-gray-300">
                           I agree to the{' '}
                           <Link to="/terms" className="font-semibold text-primary-600 hover:text-primary-700">
                             Terms of Service
@@ -613,7 +613,7 @@ const Register = () => {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={handleBack}
-                    className="flex-1 py-3 border-2 border-gray-300 text-gray-700 rounded-xl font-bold hover:bg-gray-50 transition-all"
+                    className="flex-1 py-3 border-2 border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 rounded-xl font-bold hover:bg-gray-50 dark:bg-gray-900 transition-all"
                   >
                     Back
                   </motion.button>
@@ -660,7 +660,7 @@ const Register = () => {
 
             {/* Sign In Link */}
             <motion.div variants={itemVariants} className="mt-8 text-center">
-              <p className="text-gray-600">
+              <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500">
                 Already have an account?{' '}
                 <Link to="/auth/login" className="font-bold text-primary-600 hover:text-primary-700 transition-colors">
                   Sign in

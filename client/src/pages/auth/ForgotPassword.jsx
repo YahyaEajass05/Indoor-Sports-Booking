@@ -114,7 +114,7 @@ const ForgotPassword = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50 flex items-center justify-center p-6 relative overflow-hidden">
+    <div className="min-h-screen">
       {/* Animated Background */}
       <motion.div
         className="absolute inset-0 opacity-30"
@@ -168,7 +168,7 @@ const ForgotPassword = () => {
             <motion.div variants={itemVariants} className="mb-8">
               <Link
                 to="/auth/login"
-                className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors font-medium"
+                className="inline-flex items-center gap-2 text-gray-600 dark:text-gray-400 dark:text-gray-500 hover:text-gray-900 dark:text-white transition-colors font-medium"
               >
                 <FiArrowLeft />
                 Back to Login
@@ -192,8 +192,8 @@ const ForgotPassword = () => {
                     >
                       <FiShield className="text-4xl text-white" />
                     </motion.div>
-                    <h2 className="text-3xl font-bold text-gray-900 mb-2">Forgot Password?</h2>
-                    <p className="text-gray-600">
+                    <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">Forgot Password?</h2>
+                    <p className="text-gray-600 dark:text-gray-400 dark:text-gray-500">
                       No worries! Enter your email and we'll send you reset instructions.
                     </p>
                   </motion.div>
@@ -201,11 +201,11 @@ const ForgotPassword = () => {
                   {/* Form */}
                   <form onSubmit={handleSubmit} className="space-y-6">
                     <motion.div variants={itemVariants}>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">
+                      <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                         Email Address
                       </label>
                       <div className="relative">
-                        <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-xl" />
+                        <FiMail className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 dark:text-gray-500 text-xl" />
                         <motion.input
                           type="email"
                           value={email}
@@ -313,7 +313,7 @@ const ForgotPassword = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3 }}
-                    className="text-2xl font-bold text-gray-900 mb-2"
+                    className="text-2xl font-bold text-gray-900 dark:text-white mb-2"
                   >
                     Check Your Email!
                   </motion.h3>
@@ -322,7 +322,7 @@ const ForgotPassword = () => {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="text-gray-600 mb-6"
+                    className="text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-6"
                   >
                     We've sent password reset instructions to
                   </motion.p>
@@ -334,7 +334,7 @@ const ForgotPassword = () => {
                     className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-lg mb-8"
                   >
                     <FiMail className="text-primary-600" />
-                    <span className="font-semibold text-gray-900">{email}</span>
+                    <span className="font-semibold text-gray-900 dark:text-white">{email}</span>
                   </motion.div>
 
                   {/* Instructions */}
@@ -344,33 +344,33 @@ const ForgotPassword = () => {
                     transition={{ delay: 0.6 }}
                     className="space-y-4 text-left mb-8"
                   >
-                    <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
                       <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-bold text-primary-600">1</span>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900 mb-1">Check your inbox</p>
-                        <p className="text-xs text-gray-600">Look for an email from CourtBooker</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Check your inbox</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 dark:text-gray-500">Look for an email from CourtBooker</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
                       <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-bold text-primary-600">2</span>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900 mb-1">Click the reset link</p>
-                        <p className="text-xs text-gray-600">The link expires in 1 hour</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Click the reset link</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 dark:text-gray-500">The link expires in 1 hour</p>
                       </div>
                     </div>
 
-                    <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
+                    <div className="flex items-start gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-xl">
                       <div className="w-8 h-8 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
                         <span className="text-sm font-bold text-primary-600">3</span>
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900 mb-1">Create new password</p>
-                        <p className="text-xs text-gray-600">Choose a strong, unique password</p>
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Create new password</p>
+                        <p className="text-xs text-gray-600 dark:text-gray-400 dark:text-gray-500">Choose a strong, unique password</p>
                       </div>
                     </div>
                   </motion.div>
@@ -381,13 +381,13 @@ const ForgotPassword = () => {
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.7 }}
                   >
-                    <p className="text-sm text-gray-600 mb-3">Didn't receive the email?</p>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500 mb-3">Didn't receive the email?</p>
                     <motion.button
                       onClick={handleResend}
                       disabled={countdown > 0}
                       whileHover={{ scale: countdown > 0 ? 1 : 1.02 }}
                       whileTap={{ scale: countdown > 0 ? 1 : 0.98 }}
-                      className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 dark:text-gray-300 rounded-xl font-semibold hover:bg-gray-200 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <FiRefreshCw className={countdown > 0 ? 'animate-spin' : ''} />
                       {countdown > 0 ? (
@@ -429,7 +429,7 @@ const ForgotPassword = () => {
           transition={{ delay: 0.8 }}
           className="mt-6 text-center"
         >
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-gray-600 dark:text-gray-400 dark:text-gray-500">
             Need help?{' '}
             <Link to="/contact" className="font-semibold text-primary-600 hover:text-primary-700 transition-colors">
               Contact Support
